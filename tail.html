@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sticky Test</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #1a1a1a;
+    }
+
+    #test {
+      width: 100vw;
+      min-height: 300vh; /* Provides scrollable room for the sticky effect */
+      font-size: 30px;
+      color: white;
+      background-color: #2a2a2a;
+    }
+
+    #test > div {
+      display: block;
+      position: sticky;
+      top: 100px;
+      width: 100vw;
+      height: 100vh;
+      background-color: #007acc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="test">
+    <div>I will stick 100px from the top when you scroll!</div>
+  </div>
+
+</body>
+</html>

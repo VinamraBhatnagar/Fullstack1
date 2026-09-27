@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# OS metadata
+.DS_Store
+*.DS_Store
+Thumbs.db
+
+# Tooling / IDE
+.qodo/
+.idea/
+.vscode/

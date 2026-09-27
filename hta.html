@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopKart - E-Commerce Product Listing</title>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & CSS VARIABLES (From Task Specification)
+       ========================================================================== */
+    :root {
+      /* Colour Palette */
+      --background: #F8FAFC;
+      --white: #FFFFFF;
+      --heading: #111827;
+      --body: #6B7280;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --sale: #DC2626;
+      --new-badge: #10B981;
+      --border: #E5E7EB;
+      --rating: #F59E0B;
+
+      /* Typography */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --fs-title: 16px;
+      --fs-price: 20px;
+      --fs-old-price: 14px;
+      --fs-category: 13px;
+      --fs-filter-heading: 16px;
+      --fs-body: 14px;
+
+      /* Dimensions & Spacing */
+      --sidebar-width: 240px;
+      --layout-gap: 32px;
+      --grid-gap: 24px;
+      --card-desktop-width: 260px;
+      --image-height: 220px;
+      --card-padding: 16px;
+      --card-radius: 12px;
+      --container-max-width: 1360px;
+    }
+
+    /* ==========================================================================
+       CSS RESET & BASE
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--fs-body);
+      color: var(--body);
+      background-color: var(--background);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    input, select {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR (Responsive)
+       ========================================================================== */
+    .navbar {
+      background-color: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+    }
+
+    .nav-container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Mobile Hamburger Icon (Hidden on Desktop) */
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--heading);
+      transition: background-color 0.2s;
+    }
+
+    .hamburger-btn:hover {
+      background-color: var(--background);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.4px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Centered Search Bar */
+    .nav-search {
+      flex: 1;
+      max-width: 520px;
+      position: relative;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 46px 0 18px;
+      background-color: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      color: var(--heading);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+      background-color: var(--white);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--body);
+      transition: color 0.2s;
+    }
+
+    .search-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Nav Actions: Cart & Profile */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--heading);
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--background);
+      color: var(--primary);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: var(--primary);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid var(--white);
+    }
+
+    /* ==========================================================================
+       PAGE CONTAINER & BREADCRUMBS
+       ========================================================================== */
+    .page-container {
+      max-width: var(--container-max-width);
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 24px 60px 24px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--fs-category);
+      color: var(--body);
+      margin-bottom: 24px;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    .breadcrumb-sep {
+      color: #9CA3AF;
+      font-size: 11px;
+    }
+
+    .breadcrumb-current {
+      color: var(--heading);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       MAIN CATALOGUE LAYOUT
+       Desktop: Sidebar 240px + Gap 32px + Products remaining width
+       ========================================================================== */
+    .catalog-layout {
+      display: flex;
+      gap: var(--layout-gap);
+      align-items: flex-start;
+    }
+
+    /* ==========================================================================
+       SIDEBAR FILTER PANEL (Desktop: 240px)
+       ========================================================================== */
+    .filter-sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: sticky;
+      top: 96px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-title {
+      font-size: var(--fs-filter-heading);
+      font-weight: 600;
+      color: var(--heading);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-group {
+      margin-bottom: 24px;
+    }
+
+    .filter-group-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 12px;
+    }
+
+    .filter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--body);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .filter-label:hover {
+      color: var(--heading);
+    }
+
+    .filter-checkbox,
+    .filter-radio {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      background-color: var(--white);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .filter-radio {
+      border-radius: 50%;
+    }
+
+    .filter-checkbox:checked,
+    .filter-radio:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .filter-checkbox:checked::before {
+      content: "";
+      width: 10px;
+      height: 6px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .filter-radio:checked::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .btn-apply-filters {
+      width: 100%;
+      background-color: var(--primary);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-apply-filters:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       HORIZONTAL FILTER BAR (Tablet & Mobile only)
+       ========================================================================== */
+    .horizontal-filter-bar {
+      display: none;
+      margin-bottom: 20px;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .filter-bar-btn {
+      flex: 1;
+      height: 42px;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--heading);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .filter-bar-btn:hover {
+      background-color: #F1F5F9;
+      border-color: #CBD5E1;
+    }
+
+    /* ==========================================================================
+       PRODUCTS AREA (Header & Grid)
+       ========================================================================== */
+    .products-container {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .products-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .results-count {
+      font-size: var(--fs-body);
+      color: var(--body);
+      font-weight: 500;
+    }
+
+    .sort-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--body);
+    }
+
+    .sort-dropdown {
+      position: relative;
+    }
+
+    .sort-select {
+      appearance: none;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 32px 8px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--heading);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sort-select:hover,
+    .sort-select:focus {
+      border-color: var(--primary);
+    }
+
+    .sort-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--body);
+    }
+
+    /* ==========================================================================
+       CSS GRID SPECIFICATION
+       Breakpoints:
+       < 640px:       1 product
+       640–1023px:    2 products
+       ≥ 1024px:      3 products
+       ≥ 1280px:      4 products
+       gap:           24px
+       ========================================================================== */
+    .product-grid {
+      display: grid;
+      gap: var(--grid-gap);
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       PRODUCT CARD (Flexbox inside: flex flex-col)
+       Card structure:
+       Image
+       ↓
+       Category
+       ↓
+       Product name
+       ↓
+       Rating
+       ↓
+       Price + old price
+       ↓
+       Add to Cart
+       ========================================================================== */
+    .product-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: var(--card-padding);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      min-width: 0;
+    }
+
+    /* Product Hover Shadow */
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+      border-color: #CBD5E1;
+    }
+
+    /* 1. Image Container */
+    .card-media {
+      position: relative;
+      width: 100%;
+      height: var(--image-height);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #F8FAFC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    /* Image zoom on hover */
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 12px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card:hover .card-img {
+      transform: scale(1.08);
+    }
+
+    /* Badges: SALE and NEW */
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      color: var(--white);
+      z-index: 2;
+    }
+
+    .badge-sale {
+      background-color: var(--sale);
+    }
+
+    .badge-new {
+      background-color: var(--new-badge);
+    }
+
+    /* Wishlist Heart Button */
+    .wishlist-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9CA3AF;
+      z-index: 2;
+      transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s;
+    }
+
+    .wishlist-btn:hover {
+      color: var(--sale);
+      background-color: var(--white);
+      transform: scale(1.1);
+    }
+
+    /* 2. Category */
+    .product-category {
+      font-size: var(--fs-category);
+      color: var(--body);
+      margin-bottom: 4px;
+    }
+
+    /* 3. Product Name */
+    .product-name {
+      font-size: var(--fs-title);
+      font-weight: 600;
+      color: var(--heading);
+      line-height: 1.35;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 4. Rating */
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .rating-star {
+      color: var(--rating);
+      display: flex;
+      align-items: center;
+    }
+
+    .rating-score {
+      font-weight: 600;
+      color: var(--heading);
+    }
+
+    .rating-count {
+      color: var(--body);
+    }
+
+    /* 5. Price + Old Price */
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: auto;
+      margin-bottom: 14px;
+    }
+
+    .current-price {
+      font-size: var(--fs-price);
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.3px;
+    }
+
+    .old-price {
+      font-size: var(--fs-old-price);
+      text-decoration: line-through;
+      color: var(--body);
+      font-weight: 400;
+    }
+
+    /* 6. Add to Cart Button (Hover State) */
+    .btn-add-cart {
+      width: 100%;
+      background-color: var(--primary);
+      color: var(--white);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-add-cart:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .btn-add-cart:active {
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS (According to Specification)
+       ========================================================================== */
+
+    /* 1. Desktop ≥ 1280px: 4 products */
+    @media (min-width: 1280px) {
+      .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* 2. Desktop 1024px – 1279px: 3 products */
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* 3. Tablet 640px – 1023px: 2 products, Sidebar -> horizontal filter bar */
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .filter-sidebar {
+        display: none;
+      }
+
+      .horizontal-filter-bar {
+        display: flex;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .catalog-layout {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .nav-search {
+        max-width: 320px;
+      }
+    }
+
+    /* 4. Mobile < 640px: 1 product, Sidebar hidden */
+    @media (max-width: 639px) {
+      .filter-sidebar {
+        display: none;
+      }
+
+      .horizontal-filter-bar {
+        display: flex;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .catalog-layout {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .page-container {
+        padding: 16px 16px 40px 16px;
+      }
+
+      .nav-container {
+        padding: 0 16px;
+        height: 64px;
+      }
+
+      .hamburger-btn {
+        display: flex;
+      }
+
+      .nav-search {
+        display: none;
+      }
+
+      .products-topbar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       RESPONSIVE HEADER / NAVBAR
+       ========================================================================== -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-left">
+        <!-- Mobile hamburger menu button -->
+        <button class="hamburger-btn" type="button" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <a href="#" class="brand-logo">
+          <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <span>ShopKart</span>
+        </a>
+      </div>
+
+      <!-- Desktop / Tablet Search Bar -->
+      <div class="nav-search">
+        <div class="search-wrapper">
+          <input type="text" class="search-input" placeholder="Search for products...">
+          <button class="search-btn" type="button" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nav Icons: Cart & Profile -->
+      <div class="nav-actions">
+        <button class="nav-btn" type="button" aria-label="Shopping Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge">2</span>
+        </button>
+
+        <button class="nav-btn" type="button" aria-label="User Profile">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="page-container">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="#">Electronics</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Laptops</span>
+    </nav>
+
+    <!-- Tablet & Mobile Horizontal Filter Bar -->
+    <div class="horizontal-filter-bar">
+      <button class="filter-bar-btn" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+        <span>Filters</span>
+      </button>
+
+      <button class="filter-bar-btn" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+        <span>Sort</span>
+      </button>
+    </div>
+
+    <!-- Main Layout (Desktop: Sidebar 240px + Products Grid) -->
+    <div class="catalog-layout">
+
+      <!-- DESKTOP SIDEBAR FILTER PANEL -->
+      <aside class="filter-sidebar">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            Filters
+          </h2>
+        </div>
+
+        <form action="#" method="get">
+          <!-- Category Section -->
+          <div class="filter-group">
+            <h3 class="filter-group-title">Category</h3>
+            <ul class="filter-list">
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="category" value="laptops" class="filter-checkbox" checked>
+                  <span>Laptops</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="category" value="desktops" class="filter-checkbox">
+                  <span>Desktops</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="category" value="tablets" class="filter-checkbox">
+                  <span>Tablets</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="category" value="accessories" class="filter-checkbox">
+                  <span>Accessories</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Price Range Section -->
+          <div class="filter-group">
+            <h3 class="filter-group-title">Price Range</h3>
+            <ul class="filter-list">
+              <li>
+                <label class="filter-label">
+                  <input type="radio" name="price" value="0-25000" class="filter-radio">
+                  <span>₹0 - ₹25,000</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="radio" name="price" value="25000-50000" class="filter-radio" checked>
+                  <span>₹25,000 - ₹50,000</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="radio" name="price" value="50000-75000" class="filter-radio">
+                  <span>₹50,000 - ₹75,000</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="radio" name="price" value="75000-plus" class="filter-radio">
+                  <span>₹75,000+</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Brand Section -->
+          <div class="filter-group">
+            <h3 class="filter-group-title">Brand</h3>
+            <ul class="filter-list">
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="brand" value="dell" class="filter-checkbox" checked>
+                  <span>Dell</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="brand" value="hp" class="filter-checkbox">
+                  <span>HP</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="brand" value="lenovo" class="filter-checkbox">
+                  <span>Lenovo</span>
+                </label>
+              </li>
+              <li>
+                <label class="filter-label">
+                  <input type="checkbox" name="brand" value="apple" class="filter-checkbox">
+                  <span>Apple</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <button type="submit" class="btn-apply-filters">Apply Filters</button>
+        </form>
+      </aside>
+
+      <!-- PRODUCTS CATALOGUE -->
+      <section class="products-container">
+        <!-- Products Top Bar -->
+        <div class="products-topbar">
+          <div class="results-count">Showing 12 results</div>
+
+          <div class="sort-wrapper">
+            <label for="sortDropdown">Sort by:</label>
+            <div class="sort-dropdown">
+              <select id="sortDropdown" class="sort-select">
+                <option value="popularity" selected>Popularity</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+              </select>
+              <div class="sort-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT GRID (Pure HTML & CSS) -->
+        <div class="product-grid">
+
+          <!-- Card 1: Dell Inspiron 15 (SALE) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-sale">SALE</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&auto=format&fit=crop&q=80" alt="Dell Inspiron 15" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">Dell Inspiron 15</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.5</span>
+              <span class="rating-count">(1.2k)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹45,990</span>
+              <span class="old-price">₹60,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 2: HP Pavilion (NEW) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-new">NEW</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&auto=format&fit=crop&q=80" alt="HP Pavilion" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">HP Pavilion</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.3</span>
+              <span class="rating-count">(892)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹52,990</span>
+              <span class="old-price">₹59,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 3: Lenovo IdeaPad -->
+          <article class="product-card">
+            <div class="card-media">
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&auto=format&fit=crop&q=80" alt="Lenovo IdeaPad" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">Lenovo IdeaPad</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.2</span>
+              <span class="rating-count">(654)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹38,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 4: MacBook Air M2 -->
+          <article class="product-card">
+            <div class="card-media">
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80" alt="MacBook Air M2" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">MacBook Air M2</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.8</span>
+              <span class="rating-count">(1.5k)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹93,090</span>
+              <span class="old-price">₹99,900</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 5: ASUS Vivobook (NEW) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-new">NEW</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&auto=format&fit=crop&q=80" alt="ASUS Vivobook" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">ASUS Vivobook</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.4</span>
+              <span class="rating-count">(731)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹41,990</span>
+              <span class="old-price">₹48,000</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 6: Dell XPS 13 -->
+          <article class="product-card">
+            <div class="card-media">
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&auto=format&fit=crop&q=80" alt="Dell XPS 13" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">Dell XPS 13</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.6</span>
+              <span class="rating-count">(1.1k)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹89,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 7: HP Envy x360 (SALE) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-sale">SALE</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&auto=format&fit=crop&q=80" alt="HP Envy x360" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">HP Envy x360</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.5</span>
+              <span class="rating-count">(540)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹72,990</span>
+              <span class="old-price">₹84,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 8: Lenovo Legion Pro 5 (NEW) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-new">NEW</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&auto=format&fit=crop&q=80" alt="Lenovo Legion Pro 5" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">Lenovo Legion Pro 5</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.7</span>
+              <span class="rating-count">(1.4k)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹1,12,990</span>
+              <span class="old-price">₹1,25,000</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 9: MacBook Pro 14 M3 -->
+          <article class="product-card">
+            <div class="card-media">
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80" alt="MacBook Pro 14 M3" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">MacBook Pro 14 M3</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.9</span>
+              <span class="rating-count">(2.1k)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹1,69,900</span>
+              <span class="old-price">₹1,79,900</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 10: ASUS ROG Zephyrus G14 (SALE) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-sale">SALE</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&auto=format&fit=crop&q=80" alt="ASUS ROG Zephyrus G14" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">ASUS ROG Zephyrus G14</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.7</span>
+              <span class="rating-count">(860)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹1,24,990</span>
+              <span class="old-price">₹1,39,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 11: Dell Vostro 3520 -->
+          <article class="product-card">
+            <div class="card-media">
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&auto=format&fit=crop&q=80" alt="Dell Vostro 3520" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">Dell Vostro 3520</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.1</span>
+              <span class="rating-count">(490)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹34,990</span>
+              <span class="old-price">₹42,000</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+          <!-- Card 12: HP Victus 15 (SALE) -->
+          <article class="product-card">
+            <div class="card-media">
+              <span class="product-badge badge-sale">SALE</span>
+              <button class="wishlist-btn" type="button" aria-label="Add to Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=80" alt="HP Victus 15" class="card-img" loading="lazy">
+            </div>
+            <span class="product-category">Laptops</span>
+            <h3 class="product-name">HP Victus 15</h3>
+            <div class="product-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-score">4.4</span>
+              <span class="rating-count">(910)</span>
+            </div>
+            <div class="price-row">
+              <span class="current-price">₹64,990</span>
+              <span class="old-price">₹75,990</span>
+            </div>
+            <button type="button" class="btn-add-cart">Add to Cart</button>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>

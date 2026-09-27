@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*#one{
+            color: blue;
+        }
+        .two{
+            color: green;
+        }
+        li[id="label"]{
+            color: yellowgreen;
+        }
+        span{
+            color: red;
+        }
+        ul>li.two>span{
+            color: violet;
+        }*/
+        li:hover{
+            color: green;
+        }
+        button{
+            width: 200px;
+            height: 100px;
+            cursor: pointer;   
+        }
+        button:active{
+            background-color: aqua;
+        }
+        button:focus{
+            border: 5px solid blue ;
+        }
+        button:hover{
+            background-color: aqua;
+            border: 5px solid green ;
+        }
+        a:link{
+            color: grey;
+            text-decoration: none;
+        }
+        a:visited{
+            color: darkgray;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Sample List</h1>
+        <ul>
+            <li id="one">Item with <strong>id="one"</strong> (should be blue)</li>
+            <li class="two">Item with <strong>class="two"</strong> (should be green)</li>
+            <li class="two">Another item with a direct child <span>span (should be violet)</span></li>
+            <li id="label">Labeled item with <strong>id="label"</strong> (should be yellowgreen)</li>
+            <li class="two"><span>Span in a .two item (direct child, violet)</span> — and some trailing text.</li>
+        </ul>
+    </main>
+    <button>Click me</button><br>
+    <a herf="https://www.google.com/?zx=1787545555327" >Link click</a>
+    <p>This is a paragrph</p>
+</body>
+</html>

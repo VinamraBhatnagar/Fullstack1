@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bento Box Layout</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #f2f2f2;
+        }
+
+        /* Outer Bento Box */
+        .bento-container {
+            width: 900px;
+            padding: 20px;
+
+            background: rgb(255, 255, 255);
+            border: 3px solid black;
+            border-radius: 20px;
+
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 150px);
+            gap: 15px;
+        }
+
+        /* Common Box Styling */
+        .box {
+            border: 2px solid black;
+            border-radius: 12px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 25px;
+        }
+
+        /* Different Bento Box Sizes */
+
+        .box1 {
+            grid-column: span 2;
+            grid-row: span 2;
+            background-color: aqua;
+        }
+
+        .box2 {
+            grid-column: span 2;
+            background-color: beige;
+        }
+
+        .box3 {
+            grid-row: span 2;
+            background-color: turquoise;
+        }
+
+        .box4 {
+            grid-column: span 2;
+            background-color: aquamarine;
+        }
+
+        .box5 {
+            grid-column: span 1;
+            background-color: fuchsia;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bento-container">
+
+        <div class="box box1">1</div>
+
+        <div class="box box2">2</div>
+
+        <div class="box box3">3</div>
+
+        <div class="box box4">4</div>
+
+        <div class="box box5">5</div>
+
+    </div>
+
+</body>
+</html>
